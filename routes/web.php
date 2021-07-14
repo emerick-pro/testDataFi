@@ -16,7 +16,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view("home");
 });
+Route::get('/newDrugRefill', function (){
+    return view('arvRefill.newRefill');
+}
 
-Auth::routes();
+);
+Route::get('listDrugRefill', 'App\Http\Controllers\ArvRefillController@index');
+
+Route::post('/postNewDrugRefill', 'App\Http\Controllers\ArvRefillController@store');
+
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class ArvRefill extends Model
 {
     use HasFactory;
+    protected $table = "arv_refills";
+
+    protected $guarded = [];
+
+    public function withRefills()
+    {
+        return array();
+    }
 }

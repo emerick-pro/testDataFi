@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\ArvRefill;
+use App\Models\Patient;
+
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
 class ArvRefillController extends Controller
 {
     /**
@@ -15,6 +18,13 @@ class ArvRefillController extends Controller
     public function index()
     {
         //
+        $refills=ArvRefill::all();
+
+        $nbr_patients=Patient::count();
+
+        return view('arvRefill.listArvRefill')
+        ->with('refills', $refills)
+        ->with('nbr_patients', $nbr_patients);
     }
 
     /**
@@ -36,6 +46,29 @@ class ArvRefillController extends Controller
     public function store(Request $request)
     {
         //
+        $validator=$request->validate([
+
+            'patient_code'=>'required',
+
+            'date_refill'=>'required|date_format:"d/m/Y"|before:tomorrow',
+            'prochain_rendez_vous'=>'sometimes|date_format:"d/m/Y"',
+        ]);
+        $refill=array();
+        $refill['patient_code']=$request->input('patient_code');
+        $refill['date_refill']=mysqldate($request->input('date_refill'));
+        $refill['quantity']=$request->input('quantity');
+        $refill['prochain_rendez_vous']=mysqldate($request->input('prochain_rendez_vous'));
+        $refill['nbr_days']=$request->input('nbr_days');
+
+        $this->procedeRefillValidation($refill);
+
+        DB::beginTransaction();
+
+        $appro= ArvRefill::create( $refill);
+
+        DB::commit();
+        //
+        return view('arvRefill.newRefill',["message"=>"Enregistrement avec success"]);
     }
 
     /**
@@ -81,5 +114,16 @@ class ArvRefillController extends Controller
     public function destroy(ArvRefill $arvRefill)
     {
         //
+    }
+
+    /**
+     * Return boolean
+     * Make sure the dates are coherent
+     *
+     */
+
+    private function procedeRefillValidation($refill)
+    {
+        return true;
     }
 }
