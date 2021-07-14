@@ -60,15 +60,31 @@ class ArvRefillController extends Controller
         $refill['prochain_rendez_vous']=mysqldate($request->input('prochain_rendez_vous'));
         $refill['nbr_days']=$request->input('nbr_days');
 
-        $this->procedeRefillValidation($refill);
+        if(Patient::where('patient_code','=',$refill['patient_code'])->count()<1)
+        {
+            return view('arvRefill.newRefill',["message"=>"ERREUR - Le patient avec ce code nest pas retrouve"]);
 
-        DB::beginTransaction();
+        }
 
-        $appro= ArvRefill::create( $refill);
+        if($this->procedeRefillValidation($refill))
+        {
 
-        DB::commit();
-        //
-        return view('arvRefill.newRefill',["message"=>"Enregistrement avec success"]);
+            DB::beginTransaction();
+            $appro= ArvRefill::create( $refill);
+            if($appro)
+            {
+                DB::commit();
+            }
+            else
+            {
+                DB::rollBack();
+            }
+
+            //
+            return view('arvRefill.newRefill',["message"=>"Enregistrement avec success"]);
+        }
+
+
     }
 
     /**
