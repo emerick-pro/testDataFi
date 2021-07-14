@@ -22,6 +22,7 @@ Route::get('/newDrugRefill', function (){
 
 );
 Route::get('listDrugRefill', 'App\Http\Controllers\ArvRefillController@index');
+Route::post('filterRefillByDates', 'App\Http\Controllers\ArvRefillController@filterRefillsByDates');
 
 Route::post('/postNewDrugRefill', 'App\Http\Controllers\ArvRefillController@store');
 

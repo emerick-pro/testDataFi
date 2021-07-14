@@ -27,7 +27,7 @@
             @endif
 
 
-                <form action="<?php echo url("/postNewDrugRefill");?>" method="POST">
+                <form action="<?php echo url("/filterRefillByDates");?>" method="POST">
                     @csrf <!-- {{ csrf_field() }} -->
 
                     <div class="form-group row">

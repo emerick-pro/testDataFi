@@ -82,6 +82,30 @@ class ArvRefillController extends Controller
         //
     }
 
+    public function filterRefillsByDates(Request $request)
+    {
+        $validator=$request->validate([
+
+
+
+            'date_refill1'=>'required|date_format:"d/m/Y"|before:tomorrow',
+            'date_refill2'=>'required|date_format:"d/m/Y"|after:date_refill1',
+        ]);
+
+        $date_refill1=mysqldate($request->input('date_refill1'));
+        $date_refill2=mysqldate($request->input('date_refill2'));
+
+        /* Get refills between a period of two dates */
+        $refills=ArvRefill::where('date_refill','>=',$date_refill1)
+                        ->where('date_refill','<=',$date_refill2)->get();
+
+        $nbr_patients=Patient::count();
+
+        return view('arvRefill.listArvRefill')
+        ->with('refills', $refills)
+        ->with('nbr_patients', $nbr_patients);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
