@@ -1,20 +1,21 @@
 @extends('layouts.mainLayout')
 
 @section('content')
-<div class="container bg-dark">
+<div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Dashboard') }}</div>
 
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+                    <div class="card">
 
-                    {{ __('You are logged in!') }}
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Nombre des patients : xxx</li>
+                            <li class="list-group-item">Total des approvisionnements : xxxx </li>
+
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
